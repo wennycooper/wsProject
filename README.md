@@ -1,10 +1,10 @@
 # wsProject
 
-This is a websocket example, including a websocket server and a websocket client.
+This is a webrtc + websocket video call example.
 
 # Features
-* wsServer.js: a websocket server in nodejs
-* wsClient.html: a websocket client
+* wsServer.js: a websocket server runnung on nodejs
+* wsClient.html: a websocket client + webrtc client
 
 I've put a public wsServer on "ws://ec2-54-148-62-73.us-west-2.compute.amazonaws.com:1337"
 
@@ -28,9 +28,12 @@ It will not be guaranteed to be always on.
     cd wsProject
     npm install websocket
     
-## Run
+## Run wsServer
     node ./wsServer
 
+## Run wsClient
+    In PC1, open chrome browser with wsClient.html
+    In PC2, open chrome browser with wsClient.html, and click [Send Message] button, the video call should be established.
 
 # References
 
