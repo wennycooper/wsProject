@@ -35,6 +35,13 @@ It will not be guaranteed to be always on.
     In PC1, open chrome browser with wsClient.html
     In PC2, open chrome browser with wsClient.html, and click [Send Message] button, the video call should be established.
 
+## ToDo
+    1. User registration process
+    2. Calling process
+    3. Answering process
+    4. Support other browsers
+    5. Support Android phone
+
 # References
 
 1. http://html5videoguide.net/presentations/WebDirCode2012/websocket/websocket-server.js
