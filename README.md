@@ -2,17 +2,22 @@
 
 This is a webrtc + websocket video call example.
 
-# Features
 * wsServer.js: a websocket server runnung on nodejs
 * wsClient.html: a websocket client + webrtc client
 
-I've put a public wsServer on "ws://ec2-54-148-62-73.us-west-2.compute.amazonaws.com:1337"
-
+I've put a public wsServer on "ws://ec2-54-148-62-73.us-west-2.compute.amazonaws.com:1337"  
 You can immediately try it using chrome browser with following url:
 
 http://ec2-54-148-62-73.us-west-2.compute.amazonaws.com/wsCLient.html
 
-It will not be guaranteed to be always on.
+It is not guaranteed to be always on.
+
+# Features
+
+* Video call establish between two PCs
+* Support only chrome browser
+* NAT & Firewal traversal based on STUN/TURN/ICE
+
 
 # How to Use
 ## Install git on ec2 
@@ -49,3 +54,4 @@ It will not be guaranteed to be always on.
 2. http://www.html5rocks.com/en/tutorials/webrtc/basics/
 3. http://www.html5rocks.com/en/tutorials/webrtc/infrastructure/#beyond-browsers-voip-telephones-and-messaging
 4. http://www.gtwang.org/2014/09/webrtc-media-stream.html
+
