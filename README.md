@@ -8,7 +8,7 @@ This is a webrtc + websocket video call example.
 I've put a public wsServer on "ws://ec2-54-148-62-73.us-west-2.compute.amazonaws.com:1337"  
 You can immediately try it using chrome browser with following url:
 
-http://ec2-54-148-62-73.us-west-2.compute.amazonaws.com/wsCLient.html
+   ***http://ec2-54-148-62-73.us-west-2.compute.amazonaws.com/wsClient.html***
 
 It is not guaranteed to be always on.
 
