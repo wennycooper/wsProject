@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+
+<meta charset="utf-8" />
+
+<title>WebSocket Client</title>
+
+<script language="javascript" type="text/javascript">
+
+  var wsUri = "ws://192.168.1.101:1337";
+  //var wsUri = "ws://echo.websocket.org/";
+  
+  var output;
+  var configuration = { "iceServers": [{ "url": "stun:stun.l.google.com:19302" }] };
+  var pc;
+  var constraints = {audio: false, video: true};
+  //var video = document.querySelector('video');
+  var video;
+
+  function onButtonClick()
+  {
+    //doSend(JSON.stringify({ type: 'Offer', sdp: 'sdp body is here' }));
+
+    pc.createOffer(localDescCreated, logError);
+  }
+  function init()
+  {
+    output = document.getElementById("output");
+
+    pc = new webkitRTCPeerConnection(configuration);
+
+    // 當有任何 ICE candidates 可用時，
+    // 透過 signalingChannel 將 candidate 傳送給對方
+    pc.onicecandidate = function (evt) {
+      if (evt.candidate)
+        doSend(JSON.stringify({ "candidate": evt.candidate }));
+    };
+
+    // let the "negotiationneeded" event trigger offer generation
+    pc.onnegotiationneeded = function () {
+      console.log("onNegotiationNeeded!!");
+      //pc.createOffer(localDescCreated, logError);
+    }
+
+    // once remote stream arrives, show it in the remote video element
+    pc.onaddstream = function (evt) {
+          video = document.querySelector('video');
+      video.src = window.URL.createObjectURL(evt.stream);
+    };
+
+    // get a local stream, show it in a self-view and add it to be sent
+
+    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+    navigator.getUserMedia(constraints, function (stream) {
+      video = document.querySelector('video');
+      video.src = URL.createObjectURL(stream);
+
+      pc.addStream(stream);
+    }, logError);
+
+    testWebSocket();
+  }
+
+  function testWebSocket()
+  {
+    websocket = new WebSocket(wsUri);
+    websocket.onopen = function(evt) { onOpen(evt) };
+    websocket.onclose = function(evt) { onClose(evt) };
+    websocket.onmessage = function(evt) { onMessage(evt) };
+    websocket.onerror = function(evt) { onError(evt) };
+  }
+
+  function onOpen(evt)
+  {
+    writeToScreen("CONNECTED");
+    //doSend(JSON.stringify({ type: 'type1', data: 'this is abc' }));
+  }
+
+  function onClose(evt)
+  {
+    writeToScreen("DISCONNECTED");
+  }
+
+  function onMessage(evt)
+  {
+    writeToScreen('<span style="color: blue;">onMessage: ' + evt.data+'</span>');
+    //websocket.close();
+
+    var message = JSON.parse(evt.data);
+    if (message.sdp) {
+      // 不管是收到offer or answer, 都要做setRemoteDescription
+      pc.setRemoteDescription(
+        new RTCSessionDescription(message.sdp), function () {
+          // 當接收到 offer 時，要回應一個 answer
+          if (pc.remoteDescription.type == "offer")
+            pc.createAnswer(localDescCreated, logError);
+        }, logError);
+    } else {
+      // 接收對方的 candidate 並加入自己的 RTCPeerConnection
+      pc.addIceCandidate(new RTCIceCandidate(message.candidate));
+    }
+  }
+
+  function onError(evt)
+  {
+    writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
+  }
+
+  function doSend(message)
+  {
+    writeToScreen("sendMessage: " + message); 
+    websocket.send(message);
+  }
+
+  function writeToScreen(message)
+  {
+    var pre = document.createElement("p");
+    pre.style.wordWrap = "break-word";
+    pre.innerHTML = message;
+    output.appendChild(pre);
+  }
+
+
+  
+  function successCallback(stream) {
+    window.stream = stream; // stream available to console
+    if (window.URL) {
+	  video = document.querySelector('video');
+      video.src = window.URL.createObjectURL(stream);
+    } else {
+      video.src = stream;
+    }
+  }
+
+  function errorCallback(error){
+    console.log('navigator.getUserMedia error: ', error);
+  }	
+  
+  function localDescCreated(desc) {
+    pc.setLocalDescription(desc, function () {
+      doSend(JSON.stringify({ "sdp": pc.localDescription }));
+    }, logError);
+  }
+  
+  function logError(error) {
+    console.log(error.name + ": " + error.message);
+  }
+  
+//  navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+//  navigator.getUserMedia(constraints, successCallback, errorCallback);
+
+  window.addEventListener("load", init, false);
+
+</script>
+
+<h2>WebSocket Client</h2>
+<button onclick="onButtonClick()">Send Message</button>
+<video autoplay></video>
+
+<div id="output"></div>
