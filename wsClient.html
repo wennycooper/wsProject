@@ -14,7 +14,7 @@
   var output;
   var configuration = { "iceServers": [{ "url": "stun:stun.l.google.com:19302" }] };
   var pc;
-  var constraints = {audio: false, video: true};
+  var constraints = {audio: true, video: true};
   //var video = document.querySelector('video');
   var video;
 
@@ -47,6 +47,7 @@
     pc.onaddstream = function (evt) {
           video = document.querySelector('video');
       video.src = window.URL.createObjectURL(evt.stream);
+      video.muted = false;
     };
 
     // get a local stream, show it in a self-view and add it to be sent
@@ -55,6 +56,7 @@
     navigator.getUserMedia(constraints, function (stream) {
       video = document.querySelector('video');
       video.src = URL.createObjectURL(stream);
+      video.muted = true;
 
       pc.addStream(stream);
     }, logError);
