@@ -5,15 +5,18 @@
 <title>WebSocket Client</title>
 
 <body>
+<script src="adapter.js"></script>
 <script language="javascript" type="text/javascript">
 
   //var wsUri = "ws://192.168.1.101:1337";
   //var wsUri = "ws://echo.websocket.org/";
-  var wsUri = "ws://ec2-54-148-62-73.us-west-2.compute.amazonaws.com:1337";
+  var wsUri = "ws://ec2-54-149-233-189.us-west-2.compute.amazonaws.com:1337";
   
   var output;
   var configuration = { "iceServers": [{ "url": "stun:stun.l.google.com:19302" }] };
   var pc;
+  var dc;
+
   var constraints = {audio: true, video: true};
   //var video = document.querySelector('video');
   var video;
@@ -24,11 +27,17 @@
 
     pc.createOffer(localDescCreated, logError);
   }
+
+  function DataChannelSendMessage()
+  {
+    dc.send("Message is here!!");
+  }
+
   function init()
   {
     output = document.getElementById("output");
 
-    pc = new webkitRTCPeerConnection(configuration);
+    pc = new RTCPeerConnection(configuration);
 
     // 當有任何 ICE candidates 可用時，
     // 透過 signalingChannel 將 candidate 傳送給對方
@@ -48,6 +57,31 @@
           video = document.querySelector('video');
       video.src = window.URL.createObjectURL(evt.stream);
       video.muted = false;
+    };
+
+    // Added by KKuei for DataChannel
+
+    var dataChannelOptions = {
+      ordered: false, // do not guarantee order
+      maxRetransmitTime: 3000, // in milliseconds
+    };
+
+    dc = pc.createDataChannel("myLabel", dataChannelOptions);
+
+    dc.onerror = function (error) {
+      console.log("Data Channel Error:", error);
+    };
+
+    dc.onmessage = function (event) {
+      console.log("Got Data Channel Message:", event.data);
+    };
+
+    dc.onopen = function () {
+      dc.send("Hello World!");
+    };
+
+    dc.onclose = function () {
+      console.log("The Data Channel is Closed");
     };
 
     // get a local stream, show it in a self-view and add it to be sent
@@ -159,6 +193,9 @@
 <h2>Webrtc Client by Kevin Kuei</h2>
 <h3>Plz have two chrome browsers stay on this page, and one click CALL button, then you got it</h3>
 <button onclick="onButtonClick()">CALL</button>
+
+<button onclick="DataChannelSendMessage()">SendMessage</button>
+
 <video autoplay></video>
 
 <div id="output"></div>

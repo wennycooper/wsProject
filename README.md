@@ -5,17 +5,17 @@ This is a webrtc + websocket video call example.
 * wsServer.js: a websocket server runnung on nodejs
 * wsClient.html: a websocket client + webrtc client
 
-I've put a public wsServer on "ws://ec2-54-148-62-73.us-west-2.compute.amazonaws.com:1337"  
+I've put a public wsServer on "ws://ec2-54-149-233-189.us-west-2.compute.amazonaws.com/wsClient.html:1337"  
 You can immediately try it using chrome browser with following url:
 
-   ***http://ec2-54-148-62-73.us-west-2.compute.amazonaws.com/wsClient.html***
+   ***http://ec2-54-149-233-189.us-west-2.compute.amazonaws.com/wsClient.html/wsClient.html***
 
 It is not guaranteed to be always on.
 
 # Features
 
 * Video call establish between two PCs
-* Support only chrome browser
+* Support chrome and firefox browser
 * NAT & Firewal traversal based on STUN/TURN/ICE
 
 
@@ -37,16 +37,12 @@ It is not guaranteed to be always on.
     node ./wsServer
 
 ## Run wsClient
-    In PC1, open chrome browser with wsClient.html
-    In PC2, open chrome browser with wsClient.html, and click [Send Message] button, the video call should be established.
+    In PC1, open chrome/firefox browser with wsClient.html
+    In PC2, open chrome/firefox browser with wsClient.html, and click [Send Message] button, the video call should be established.
 
 ## ToDo
 
 1. User registration process
-2. Calling process
-3. Answering process
-4. Support other browsers
-5. Support Android phone
 
 # References
 
