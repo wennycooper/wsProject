@@ -5,12 +5,15 @@ This is a webrtc + websocket video call example.
 * wsServer.js: a websocket server runnung on nodejs
 * wsClient.html: a websocket client + webrtc client
 
-I've put a public wsServer on "ws://ec2-54-149-233-189.us-west-2.compute.amazonaws.com/wsClient.html:1337"  
-You can immediately try it using chrome browser with following url:
+I've put a public wsServer on 
+
+   ***ws://ec2-54-149-233-189.us-west-2.compute.amazonaws.com/wsClient.html:1337***
+   
+You can immediately try the web app demo via chrome/firefox browser with the url:
 
    ***http://ec2-54-149-233-189.us-west-2.compute.amazonaws.com/wsClient.html/wsClient.html***
 
-It is not guaranteed to be always on.
+The public server is not guaranteed to be always on.
 
 # Features
 
@@ -26,7 +29,7 @@ It is not guaranteed to be always on.
 ## clone this project
     git clone https://github.com/wennycooper/wsproject
 
-## Install nodejs on ec2
+## Install nodejs on ec2 standard AMI
     sudo yum install nodejs npm --enablerepo=epel
 
 ## Install websocket module
@@ -38,7 +41,8 @@ It is not guaranteed to be always on.
 
 ## Run wsClient
     In PC1, open chrome/firefox browser with wsClient.html
-    In PC2, open chrome/firefox browser with wsClient.html, and click [Send Message] button, the video call should be established.
+    In PC2, open chrome/firefox browser with wsClient.html, 
+    and on one PC, click [Call] button, the video call should be established.
 
 ## ToDo
 
