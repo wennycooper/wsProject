@@ -5,7 +5,7 @@ This is a webrtc + websocket video call example.
 * wsServer.js: a websocket server runnung on nodejs
 * wsClient.html: a websocket client + webrtc client
 
-I've put a public wsServer on 
+I've host a public wsServer on:
 
    ***ws://ec2-54-149-233-189.us-west-2.compute.amazonaws.com/wsClient.html:1337***
    
