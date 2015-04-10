@@ -17,7 +17,8 @@
   var pc;
   var dc;
 
-  var constraints = {audio: true, video: true};
+  //var constraints = {audio: true, video: true};
+  var constraints = {audio: true, video: true, optional: [{ RtpDataChannels: true }]};
   //var video = document.querySelector('video');
   var video;
 
@@ -28,10 +29,32 @@
     pc.createOffer(localDescCreated, logError);
   }
 
-  function DataChannelSendMessage()
+  function dcSendMessage()
   {
     dc.send("Message is here!!");
   }
+
+  function registerDataChannelCallbacks()
+  {
+    dc.onerror = function (error) {
+      console.log("dc.onerror():", error);
+    };
+
+    dc.onmessage = function (event) {
+      console.log("dc.onmessage():", event.data);
+    };
+
+    dc.onopen = function () {
+      console.log("dc.onopen()");
+      dc.send("Hello World!");
+    };
+
+    dc.onclose = function () {
+      console.log("dc.onclose()");
+    };
+
+  }
+
 
   function init()
   {
@@ -44,6 +67,14 @@
     pc.onicecandidate = function (evt) {
       if (evt.candidate)
         doSend(JSON.stringify({ "candidate": evt.candidate }));
+    };
+
+    // When RTCPeerConnection established and got DataChannel
+    pc.ondatachannel = function (evt) {
+      console.log("onDataChannel()!!");
+      dc = evt.channel;  // re-assign dc instance;
+      registerDataChannelCallbacks();
+
     };
 
     // let the "negotiationneeded" event trigger offer generation
@@ -61,28 +92,10 @@
 
     // Added by KKuei for DataChannel
 
-    var dataChannelOptions = {
-      ordered: false, // do not guarantee order
-      maxRetransmitTime: 3000, // in milliseconds
-    };
+    var dataConstraints = null; 
 
-    dc = pc.createDataChannel("myLabel", dataChannelOptions);
-
-    dc.onerror = function (error) {
-      console.log("Data Channel Error:", error);
-    };
-
-    dc.onmessage = function (event) {
-      console.log("Got Data Channel Message:", event.data);
-    };
-
-    dc.onopen = function () {
-      dc.send("Hello World!");
-    };
-
-    dc.onclose = function () {
-      console.log("The Data Channel is Closed");
-    };
+    dc = pc.createDataChannel("myLabel", dataConstraints);
+    registerDataChannelCallbacks();
 
     // get a local stream, show it in a self-view and add it to be sent
 
@@ -156,8 +169,6 @@
     pre.innerHTML = message;
     output.appendChild(pre);
   }
-
-
   
   function successCallback(stream) {
     window.stream = stream; // stream available to console
@@ -194,9 +205,9 @@
 <h3>Plz have two chrome browsers stay on this page, and one click CALL button, then you got it</h3>
 <button onclick="onButtonClick()">CALL</button>
 
-<button onclick="DataChannelSendMessage()">SendMessage</button>
+<button onclick="dcSendMessage()">SendMessage</button>
 
-<video autoplay></video>
+<video width="320" height="240" autoplay></video>
 
 <div id="output"></div>
 </body>
