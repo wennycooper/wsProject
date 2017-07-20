@@ -2,16 +2,16 @@
 
 This is a webrtc + websocket video call example.
 
-* wsServer.js: a websocket server runnung on nodejs
+* wsServer.js: a secured websocket server runnung on nodejs
 * wsClient.html: a websocket client + webrtc client
 
 I've host a public wsServer on:
 
-   ***ws://ec2-54-149-233-189.us-west-2.compute.amazonaws.com/wsClient.html:1337***
+   ***wss://signal.advancedrobotics.cc:1337***
    
 You can immediately try the web app demo via chrome/firefox browser with the url:
 
-   ***http://ec2-54-149-233-189.us-west-2.compute.amazonaws.com/wsClient.html/wsClient.html***
+   ***https://signal.advancedrobotics.cc/wsClient.html***
 
 The public server is not guaranteed to be always on.
 
@@ -29,8 +29,16 @@ The public server is not guaranteed to be always on.
 ## clone this project
     git clone https://github.com/wennycooper/wsproject
 
+## Install httpd with signed certificate (TOUGH job!!)
+
+## copy client files into httpd folder
+    cd ~wsproject
+    cp wsClient.html /var/www/html
+    cp adapter.js /var/www/html
+
 ## Install nodejs on ec2 standard AMI
     sudo yum install nodejs npm --enablerepo=epel
+
 
 ## Install websocket module
     cd wsProject
@@ -40,9 +48,11 @@ The public server is not guaranteed to be always on.
     node ./wsServer
 
 ## Run wsClient
-    In PC1, open chrome/firefox browser with wsClient.html
-    In PC2, open chrome/firefox browser with wsClient.html, 
-    and on one PC, click [Call] button, the video call should be established.
+    In PC1, open chrome/firefox browser and access https://YOUR_HTTPS_SERVER/wsClient.html
+    In PC2, open chrome/firefox browser and access https://YOUR_HTTPS_SERVER/wsClient.html
+    and on one PC, click [Call] button, the call should be established.
+
+
 
 ## ToDo
 
@@ -54,4 +64,5 @@ The public server is not guaranteed to be always on.
 2. http://www.html5rocks.com/en/tutorials/webrtc/basics/
 3. http://www.html5rocks.com/en/tutorials/webrtc/infrastructure/#beyond-browsers-voip-telephones-and-messaging
 4. http://www.gtwang.org/2014/09/webrtc-media-stream.html
+5. http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/SSL-on-an-instance.html
 
