@@ -56,13 +56,13 @@ The public server is not guaranteed to be always on.
 
 ## ToDo
 
-1. User registration process
+1. Multi-User registration process
 
 # References
 
 1. http://html5videoguide.net/presentations/WebDirCode2012/websocket/websocket-server.js
 2. http://www.html5rocks.com/en/tutorials/webrtc/basics/
-3. http://www.html5rocks.com/en/tutorials/webrtc/infrastructure/#beyond-browsers-voip-telephones-and-messaging
+3. http://www.html5rocks.com/en/tutorials/webrtc/infrastructure/
 4. http://www.gtwang.org/2014/09/webrtc-media-stream.html
 5. http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/SSL-on-an-instance.html
 
